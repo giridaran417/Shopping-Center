@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head >
+<link rel="stylesheet" type="text/css" href="verifycss.css">
+<script>
+    function jumpToNext() {
+    	
+        var a = document.getElementById("verifycode").value;
+        loadDoc(a);
+        //alert(a + " " + a+ typeof (a));
+    }
+
+
+
+    function loadDoc(code) {
+        var xhttp = new XMLHttpRequest(code);
+        xhttp.onreadystatechange = function() {
+            //document.write(this.readyState + " " + this.status + " ");
+            if (this.readyState == 4 && this.status == 200) {
+                // document.getElementById().innerHTML =
+                //     this.responseText;
+                var s = this.responseText;
+                //alert(s + "response");
+                if (s === "false"){
+                  //  alert(s + "responsereached false");
+                    document.getElementById("verifycode").setCustomValidity("Entered code is wrong");
+                    
+                    //document.getElementById("uname").validity.valid = false;
+                }
+                else {
+                    //alert(s + "responsereached true");
+                    document.getElementById("verifycode").setCustomValidity("");
+                    
+                }
+
+
+            }
+        };
+        xhttp.open("GET", "http://localhost:8080/shoppingcentre/verify?msg="+code, true);
+        xhttp.send();
+    }
+</script>
+</head>
+<body>
+    <h1>Enter the 6 digit code sent to your mail id</h1>
+    <div>
+	    <form method="get" action="http://localhost:8080/shoppingcentre/displayproducts">
+	        <input required onblur="jumpToNext()" id="verifycode" type="text"  name="num" placeholder="Verificationcode sent to mail"/><br>
+	        <input  id="submit" type="submit" >
+	    </form>
+    </div>
+</body>
+
+</html>
